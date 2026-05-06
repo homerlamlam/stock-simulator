@@ -70,9 +70,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 08:55:21 +08:00
+- 备注：已实现股票代码校验、MA、RSI、Volatility 和交易信号生成纯函数；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过。
 
 ## 4. 为纯函数补单元测试
 

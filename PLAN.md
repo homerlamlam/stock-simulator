@@ -336,3 +336,25 @@
 - 状态：已完成
 - 完成时间：2026-05-06 09:51:15 +08:00
 - 备注：已新增自选股输入、添加、删除、非法代码提示、重复添加提示，并保留空自选股恢复默认操作；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，`http://127.0.0.1:5174/` 返回 HTTP 200。
+
+## 15. 补充自选股 UI 交互测试
+
+需要完成：
+
+- 为自选股组件补充 UI 级 smoke tests。
+- 覆盖合法代码添加。
+- 覆盖非法代码错误提示。
+- 覆盖重复添加错误提示。
+- 覆盖删除自选股回调。
+
+验收标准：
+
+- 测试不依赖真实网络。
+- 测试能验证用户可见交互。
+- `npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 通过。
+
+状态记录：
+
+- 状态：已完成
+- 完成时间：2026-05-06 09:53:48 +08:00
+- 备注：已新增 `WatchlistPanel` UI smoke tests，覆盖合法添加、非法代码、重复添加和删除回调；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过。

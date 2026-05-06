@@ -287,6 +287,6 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 09:13:45 +08:00
+- 备注：最终验证已完成；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 全部通过。build 存在图表库体积 warning，暂不影响 MVP。

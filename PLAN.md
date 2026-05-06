@@ -238,9 +238,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 09:10:05 +08:00
+- 备注：已实现策略设置控件、恢复默认、模拟买入价/数量、当前价、浮动盈亏、手续费估算和止盈/止损状态显示；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，dev 服务返回 HTTP 200。build 存在图表库体积 warning，暂不影响 MVP。
 
 ## 11. 补 loading、error、empty 状态
 

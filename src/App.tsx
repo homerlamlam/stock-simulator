@@ -1,6 +1,7 @@
-import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
 import { PriceChart } from '@/components/charts'
+import { PaperTradePanel } from '@/components/paper-trade'
 import { SignalCard } from '@/components/signals'
+import { StrategySettingsPanel } from '@/components/strategy'
 import { useSignal } from '@/hooks'
 import { useStrategyStore, useWatchlistStore } from '@/store'
 
@@ -9,6 +10,8 @@ function App() {
   const selectedSymbol = useWatchlistStore((state) => state.selectedSymbol)
   const selectStock = useWatchlistStore((state) => state.selectStock)
   const settings = useStrategyStore((state) => state.settings)
+  const updateSettings = useStrategyStore((state) => state.updateSettings)
+  const resetSettings = useStrategyStore((state) => state.resetSettings)
   const snapshot = useSignal(selectedSymbol)
   const quote = snapshot.quote
 
@@ -94,20 +97,13 @@ function App() {
               </section>
 
               <section className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
-                <SectionHeader title="策略参数" note="完整控件将在后续实现" />
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <Metric label="短均线" value={`${settings.shortMaPeriod}`} />
-                  <Metric label="长均线" value={`${settings.longMaPeriod}`} />
-                  <Metric label="RSI 超买" value={`${settings.rsiOverbought}`} />
-                  <Metric label="止损" value={`${settings.stopLossPercent}%`} />
-                </div>
+                <SectionHeader title="策略参数" note="调整后实时影响信号" />
+                <StrategySettingsPanel onReset={resetSettings} onUpdate={updateSettings} settings={settings} />
               </section>
 
               <section className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
-                <SectionHeader title="模拟交易" note="表单将在后续实现" />
-                <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
-                  默认手续费估算：{(DEFAULT_STRATEGY_SETTINGS.feeRate * 100).toFixed(2)}%
-                </div>
+                <SectionHeader title="模拟交易" note="本地估算，不会下单" />
+                <PaperTradePanel quote={quote} settings={settings} />
               </section>
             </div>
           </section>

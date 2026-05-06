@@ -118,9 +118,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 08:59:00 +08:00
+- 备注：已实现 `mockMarketDataService`、可复现 PRNG、session 连续走势、mock error 开关、empty/extreme/flat/uptrend/downtrend fixtures、Quote/Candle/搜索能力及对应测试；`npm run test`、`npm run typecheck`、`npm run lint`、`npm run build` 已通过。
 
 ## 6. 实现 Zustand stores
 

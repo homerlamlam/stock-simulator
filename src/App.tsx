@@ -1,5 +1,6 @@
 import { PriceChart } from '@/components/charts'
 import { StateNotice } from '@/components/common'
+import { WatchlistPanel } from '@/components/market'
 import { MockControlsPanel } from '@/components/mock'
 import { PaperTradePanel } from '@/components/paper-trade'
 import { SignalCard } from '@/components/signals'
@@ -10,6 +11,8 @@ import { useMockControlStore, useStrategyStore, useWatchlistStore } from '@/stor
 function App() {
   const watchlist = useWatchlistStore((state) => state.watchlist)
   const selectedSymbol = useWatchlistStore((state) => state.selectedSymbol)
+  const addStock = useWatchlistStore((state) => state.addStock)
+  const removeStock = useWatchlistStore((state) => state.removeStock)
   const selectStock = useWatchlistStore((state) => state.selectStock)
   const resetWatchlist = useWatchlistStore((state) => state.resetWatchlist)
   const settings = useStrategyStore((state) => state.settings)
@@ -37,52 +40,22 @@ function App() {
         </header>
 
         <div className="grid flex-1 gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-base font-semibold text-slate-950">自选股</h2>
-              <span className="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">
-                {watchlist.length} 只
-              </span>
-            </div>
-
-            {watchlist.length === 0 ? (
-              <StateNotice
-                actionLabel="恢复默认自选股"
-                message="当前没有自选股，行情、图表和信号区域会保持空状态。"
-                onAction={resetWatchlist}
-                title="自选股为空"
-              />
-            ) : (
-              <div className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
-                {watchlist.map((stock) => {
-                  const isSelected = stock.displayCode === selectedSymbol
-
-                  return (
-                    <button
-                      className={`min-w-44 rounded-lg border px-3 py-3 text-left transition lg:min-w-0 ${
-                        isSelected
-                          ? 'border-orange-300 bg-orange-50 text-orange-950'
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/60'
-                      }`}
-                      key={stock.displayCode}
-                      onClick={() => selectStock(stock.displayCode)}
-                      type="button"
-                    >
-                      <span className="block text-sm font-semibold">{stock.displayCode}</span>
-                      <span className="block truncate text-xs text-slate-500">{stock.name}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-
+          <div>
+            <WatchlistPanel
+              onAddStock={addStock}
+              onRemoveStock={removeStock}
+              onResetWatchlist={resetWatchlist}
+              onSelectStock={selectStock}
+              selectedSymbol={selectedSymbol}
+              watchlist={watchlist}
+            />
             <MockControlsPanel
               fixtureMode={fixtureMode}
               mockError={mockError}
               onFixtureModeChange={setFixtureMode}
               onMockErrorChange={setMockError}
             />
-          </aside>
+          </div>
 
           <section className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
             <div className="grid min-w-0 gap-4">

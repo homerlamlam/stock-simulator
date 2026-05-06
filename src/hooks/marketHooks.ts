@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
 import { applyMarketDataControls, getMarketDataService } from '@/services'
-import { useMockControlStore, useStrategyStore } from '@/store'
+import { getDataSourceStatus, useDataSourceStore, useMockControlStore, useStrategyStore } from '@/store'
 import type { CandleRange, Market } from '@/types'
 import { generateTradeSignal } from '@/utils'
 
@@ -10,28 +10,30 @@ const DEFAULT_RANGE: CandleRange = '1D'
 
 export function useQuote(symbol: string | null) {
   const controls = useMarketDataControls()
+  const canRequestMarketData = controls.status.canRequestMarketData
 
   return useQuery({
-    queryKey: ['quote', symbol, controls.mockError, controls.fixtureMode],
+    queryKey: ['quote', symbol, controls.dataSourceMode, controls.mockError, controls.fixtureMode],
     queryFn: () => {
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
       return getMarketDataService().getQuote(symbol ?? '')
     },
-    enabled: Boolean(symbol),
+    enabled: Boolean(symbol) && canRequestMarketData,
     refetchInterval: controls.refreshIntervalMs,
   })
 }
 
 export function useCandles(symbol: string | null, range: CandleRange = DEFAULT_RANGE) {
   const controls = useMarketDataControls()
+  const canRequestMarketData = controls.status.canRequestMarketData
 
   return useQuery({
-    queryKey: ['candles', symbol, range, controls.mockError, controls.fixtureMode],
+    queryKey: ['candles', symbol, range, controls.dataSourceMode, controls.mockError, controls.fixtureMode],
     queryFn: () => {
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
       return getMarketDataService().getCandles(symbol ?? '', range)
     },
-    enabled: Boolean(symbol),
+    enabled: Boolean(symbol) && canRequestMarketData,
     refetchInterval: controls.refreshIntervalMs,
   })
 }
@@ -41,11 +43,12 @@ export function useStockSearch(keyword: string, market?: Market) {
   const normalizedKeyword = keyword.trim()
 
   return useQuery({
-    queryKey: ['stock-search', normalizedKeyword, market, controls.mockError],
+    queryKey: ['stock-search', normalizedKeyword, market, controls.dataSourceMode, controls.mockError],
     queryFn: () => {
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
       return getMarketDataService().searchStocks(normalizedKeyword, { market })
     },
+    enabled: controls.status.canRequestMarketData,
   })
 }
 
@@ -101,10 +104,14 @@ function useMarketDataControls() {
   const mockError = useMockControlStore((state) => state.mockError)
   const fixtureMode = useMockControlStore((state) => state.fixtureMode)
   const refreshIntervalMs = useMockControlStore((state) => state.refreshIntervalMs)
+  const dataSourceMode = useDataSourceStore((state) => state.mode)
+  const status = getDataSourceStatus(dataSourceMode)
 
   return {
+    dataSourceMode,
     mockError,
     fixtureMode,
     refreshIntervalMs,
+    status,
   }
 }

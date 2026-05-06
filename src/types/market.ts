@@ -6,6 +6,17 @@ export type CandleRange = '1D' | '5D' | '1M' | '3M'
 
 export type TrendDirection = 'UP' | 'DOWN' | 'SIDEWAYS' | 'UNKNOWN'
 
+export type DataSourceMode = 'mock' | 'real' | 'hybrid'
+
+export type DataSourceStatusCode = 'mock' | 'real_ready' | 'hybrid' | 'not_configured'
+
+export interface DataSourceStatus {
+  code: DataSourceStatusCode
+  label: string
+  message: string
+  canRequestMarketData: boolean
+}
+
 export type SignalType =
   | 'WATCH'
   | 'BUY_DIP'

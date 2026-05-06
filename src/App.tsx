@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import { PriceChart } from '@/components/charts'
 import { StateNotice } from '@/components/common'
+import { DataSourcePanel } from '@/components/data-source'
 import { WatchlistPanel } from '@/components/market'
 import { MockControlsPanel } from '@/components/mock'
 import { PaperTradePanel } from '@/components/paper-trade'
 import { SignalCard } from '@/components/signals'
 import { StrategySettingsPanel } from '@/components/strategy'
 import { useSignal, useStockSearch } from '@/hooks'
-import { useMockControlStore, useStrategyStore, useWatchlistStore } from '@/store'
+import {
+  getDataSourceStatus,
+  useDataSourceStore,
+  useMockControlStore,
+  useStrategyStore,
+  useWatchlistStore,
+} from '@/store'
 import type { Market } from '@/types'
 
 function App() {
@@ -26,6 +33,9 @@ function App() {
   const fixtureMode = useMockControlStore((state) => state.fixtureMode)
   const setMockError = useMockControlStore((state) => state.setMockError)
   const setFixtureMode = useMockControlStore((state) => state.setFixtureMode)
+  const dataSourceMode = useDataSourceStore((state) => state.mode)
+  const setDataSourceMode = useDataSourceStore((state) => state.setMode)
+  const dataSourceStatus = getDataSourceStatus(dataSourceMode)
   const stockSearch = useStockSearch(searchKeyword, activeMarket)
   const snapshot = useSignal(selectedSymbol)
   const quote = snapshot.quote
@@ -46,7 +56,7 @@ function App() {
             <h1 className="text-2xl font-semibold tracking-normal text-slate-950">Stock Signal Simulator</h1>
           </div>
           <div className="grid grid-cols-2 gap-2 text-sm sm:flex sm:items-center">
-            <StatusPill label="市场" value="模拟行情" />
+            <StatusPill label="数据源" value={dataSourceStatus.label} />
             <StatusPill label="刷新" value={quote?.updatedAt.slice(11, 16) ?? '等待数据'} />
           </div>
         </header>
@@ -73,6 +83,7 @@ function App() {
               onFixtureModeChange={setFixtureMode}
               onMockErrorChange={setMockError}
             />
+            <DataSourcePanel mode={dataSourceMode} onModeChange={setDataSourceMode} status={dataSourceStatus} />
           </div>
 
           <section className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
@@ -98,6 +109,16 @@ function App() {
                       onAction={() => setMockError(false)}
                       title="行情数据错误"
                       tone="danger"
+                    />
+                  </div>
+                ) : null}
+
+                {!dataSourceStatus.canRequestMarketData ? (
+                  <div className="mb-4">
+                    <StateNotice
+                      message={dataSourceStatus.message}
+                      title="数据源未配置"
+                      tone="warning"
                     />
                   </div>
                 ) : null}

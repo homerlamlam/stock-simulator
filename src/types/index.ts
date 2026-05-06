@@ -1,6 +1,9 @@
 export type {
   Candle,
   CandleRange,
+  DataSourceMode,
+  DataSourceStatus,
+  DataSourceStatusCode,
   Exchange,
   IndicatorResult,
   Market,

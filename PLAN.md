@@ -425,9 +425,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 15:22:36 +08:00
+- 备注：已新增数据源模式类型、`dataSourceStore`、数据源切换面板和未配置状态提示；Mock 继续可用，Real API 未配置时不发起行情请求，Hybrid 可使用 Mock 回退；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过。
 
 ## 19. 增强股票搜索数据流
 

@@ -497,6 +497,6 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 15:31:55 +08:00
+- 备注：已接入 Stooq 作为首个真实数据源试点，默认关闭并通过 `VITE_STOOQ_REAL_ENABLED=true` 开启；Vite dev proxy 代理 `/api/stooq`，当前实现美股 Quote 真实行情，Candles 和搜索保留 Mock/本地回退；未配置时应用继续正常使用 Mock，不提交任何密钥；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，并用临时 dev 服务验证 AAPL.US 真实 Quote 响应成功。

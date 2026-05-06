@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { isRealDataSourceConfigured } from '@/config'
 import type { DataSourceMode, DataSourceStatus } from '@/types'
 import { createLocalJsonStorage } from './persistStorage'
 
@@ -56,5 +57,5 @@ export function getDataSourceStatus(mode: DataSourceMode): DataSourceStatus {
 }
 
 function hasRealDataSourceConfig(): boolean {
-  return Boolean(import.meta.env.VITE_MARKET_DATA_API_KEY)
+  return isRealDataSourceConfigured()
 }

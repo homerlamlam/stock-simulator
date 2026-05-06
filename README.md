@@ -41,6 +41,24 @@ http://127.0.0.1:5174/
 
 如果端口被占用，先停止占用 `5174` 的旧进程，再重新运行 `npm run dev:local`。不要只看 `localhost:5173`，该端口可能属于其他项目。
 
+## 真实数据源试点
+
+项目已预留 Stooq 真实行情试点，默认关闭，Mock 仍是默认数据源。
+
+开启方式：
+
+```bash
+copy .env.example .env.local
+```
+
+然后把 `.env.local` 中的值改为：
+
+```text
+VITE_STOOQ_REAL_ENABLED=true
+```
+
+重新运行 `npm run dev:local` 后，在页面左侧“数据源”选择 `Real API` 或 `Hybrid`。当前试点只对美股 Quote 做真实行情请求，例如切换到“美股”并选择 `AAPL`；K 线仍使用 Mock 回退数据。
+
 ## 验证命令
 
 ```bash
@@ -77,5 +95,6 @@ npm run build
 - 切换自选股，行情、图表、信号同步变化。
 - 切换 Mock fixture，图表和状态提示变化。
 - 勾选模拟错误，页面显示错误提示，关闭后恢复。
+- 切换“数据源”到 `Real API`，未开启 `.env.local` 时应看到未配置提示；开启后可用美股 `AAPL` 验证真实 Quote 试点。
 - 修改策略参数，信号重新计算。
 - 输入模拟买入价和数量，显示浮动盈亏、手续费和止盈/止损状态。

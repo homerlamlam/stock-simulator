@@ -32,7 +32,7 @@ export function useQuote(symbol: string | null) {
       }
 
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
-      return getMarketDataService().getQuote(symbol ?? '')
+      return getMarketDataService(controls.dataSourceMode).getQuote(symbol ?? '')
     },
     enabled: Boolean(symbol) && canRequestMarketData,
     refetchInterval: controls.refreshIntervalMs,
@@ -59,7 +59,7 @@ export function useCandles(symbol: string | null, range: CandleRange = DEFAULT_R
       }
 
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
-      return getMarketDataService().getCandles(symbol ?? '', range)
+      return getMarketDataService(controls.dataSourceMode).getCandles(symbol ?? '', range)
     },
     enabled: Boolean(symbol) && canRequestMarketData,
     refetchInterval: controls.refreshIntervalMs,

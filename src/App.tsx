@@ -1,5 +1,7 @@
 import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
-import { useMarketSnapshot } from '@/hooks'
+import { PriceChart } from '@/components/charts'
+import { SignalCard } from '@/components/signals'
+import { useSignal } from '@/hooks'
 import { useStrategyStore, useWatchlistStore } from '@/store'
 
 function App() {
@@ -7,7 +9,7 @@ function App() {
   const selectedSymbol = useWatchlistStore((state) => state.selectedSymbol)
   const selectStock = useWatchlistStore((state) => state.selectStock)
   const settings = useStrategyStore((state) => state.settings)
-  const snapshot = useMarketSnapshot(selectedSymbol)
+  const snapshot = useSignal(selectedSymbol)
   const quote = snapshot.quote
 
   return (
@@ -78,19 +80,17 @@ function App() {
               </section>
 
               <section className="min-h-80 rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
-                <SectionHeader title="走势视图" note="图表将在下一步接入" />
-                <div className="mt-4 flex min-h-56 items-center justify-center rounded-lg border border-dashed border-orange-200 bg-orange-50/50 text-sm text-slate-500">
-                  价格折线、MA5、MA20、成交量区域
+                <SectionHeader title="走势视图" note="价格、均线和成交量" />
+                <div className="mt-4">
+                  <PriceChart candles={snapshot.candles} settings={settings} />
                 </div>
               </section>
             </div>
 
             <div className="grid gap-4">
               <section className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
-                <SectionHeader title="信号推荐" note="信号卡片将在下一步细化" />
-                <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
-                  当前先展示基础布局，占位保留信号类型、置信度、风险等级和原因列表。
-                </div>
+                <SectionHeader title="信号推荐" note="辅助分析结果" />
+                <SignalCard signal={snapshot.signal} />
               </section>
 
               <section className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">

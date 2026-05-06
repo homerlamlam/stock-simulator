@@ -215,9 +215,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 09:07:27 +08:00
+- 备注：已安装 Recharts，新增价格/均线/成交量图表和信号卡片，并接入 Dashboard；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，dev 服务返回 HTTP 200。build 存在图表库体积 warning，暂不影响 MVP。
 
 ## 10. 实现策略设置和模拟交易
 

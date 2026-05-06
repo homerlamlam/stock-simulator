@@ -500,3 +500,30 @@
 - 状态：已完成
 - 完成时间：2026-05-06 15:31:55 +08:00
 - 备注：已接入 Stooq 作为首个真实数据源试点，默认关闭并通过 `VITE_STOOQ_REAL_ENABLED=true` 开启；Vite dev proxy 代理 `/api/stooq`，当前实现美股 Quote 真实行情，Candles 和搜索保留 Mock/本地回退；未配置时应用继续正常使用 Mock，不提交任何密钥；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，并用临时 dev 服务验证 AAPL.US 真实 Quote 响应成功。
+
+## 22. 接入 Tushare A股真实搜索和股票信息
+
+需要完成：
+
+- 使用本机 `.env.local` 保存 `TUSHARE_TOKEN`，不提交 token。
+- 新增 Vite dev server `/api/tushare` 代理，由服务端注入 token。
+- 新增 `StockProfile` 类型，用于股票基础信息展示。
+- 使用 Tushare `stock_basic` 实现 A股真实股票搜索。
+- 使用真实搜索结果补充股票名称、交易所、行业、地区、上市日期、上市状态。
+- 未配置 token 或接口失败时回退本地缓存/Mock，并显示提示。
+- 更新 README 和 `.env.example` 说明配置方式。
+
+验收标准：
+
+- 前端 bundle 中不包含 Tushare token。
+- `.env.local` 不被 Git 跟踪。
+- A股搜索 `茅台`、`平安`、`宁德时代` 能返回真实结果。
+- 股票详情区域能显示真实基础信息。
+- 未配置或接口失败时页面不白屏，并能继续使用本地缓存。
+- `npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 通过。
+
+状态记录：
+
+- 状态：未开始
+- 完成时间：
+- 备注：

@@ -8,6 +8,7 @@ import { PaperTradePanel } from '@/components/paper-trade'
 import { SignalCard } from '@/components/signals'
 import { StrategySettingsPanel } from '@/components/strategy'
 import { useSignal, useStockSearch } from '@/hooks'
+import { getDataSourceErrorCopy } from '@/services'
 import {
   getDataSourceStatus,
   useDataSourceStore,
@@ -31,8 +32,10 @@ function App() {
   const resetSettings = useStrategyStore((state) => state.resetSettings)
   const mockError = useMockControlStore((state) => state.mockError)
   const fixtureMode = useMockControlStore((state) => state.fixtureMode)
+  const dataSourceErrorMode = useMockControlStore((state) => state.dataSourceErrorMode)
   const setMockError = useMockControlStore((state) => state.setMockError)
   const setFixtureMode = useMockControlStore((state) => state.setFixtureMode)
+  const setDataSourceErrorMode = useMockControlStore((state) => state.setDataSourceErrorMode)
   const dataSourceMode = useDataSourceStore((state) => state.mode)
   const setDataSourceMode = useDataSourceStore((state) => state.setMode)
   const dataSourceStatus = getDataSourceStatus(dataSourceMode)
@@ -40,6 +43,7 @@ function App() {
   const snapshot = useSignal(selectedSymbol)
   const quote = snapshot.quote
   const selectedStock = watchlist.find((stock) => stock.symbol === selectedSymbol) ?? null
+  const dataSourceError = snapshot.isError ? getDataSourceErrorCopy(snapshot.error) : null
 
   function handleMarketChange(market: Market): void {
     setActiveMarket(market)
@@ -79,8 +83,10 @@ function App() {
               watchlist={watchlist}
             />
             <MockControlsPanel
+              dataSourceErrorMode={dataSourceErrorMode}
               fixtureMode={fixtureMode}
               mockError={mockError}
+              onDataSourceErrorModeChange={setDataSourceErrorMode}
               onFixtureModeChange={setFixtureMode}
               onMockErrorChange={setMockError}
             />
@@ -105,10 +111,13 @@ function App() {
                 {snapshot.isError ? (
                   <div className="mb-4">
                     <StateNotice
-                      actionLabel="关闭模拟错误"
-                      message={getErrorMessage(snapshot.error)}
-                      onAction={() => setMockError(false)}
-                      title="行情数据错误"
+                      actionLabel="清除错误"
+                      message={dataSourceError?.message ?? getErrorMessage(snapshot.error)}
+                      onAction={() => {
+                        setMockError(false)
+                        setDataSourceErrorMode('none')
+                      }}
+                      title={dataSourceError?.title ?? '行情数据错误'}
                       tone="danger"
                     />
                   </div>
@@ -145,7 +154,11 @@ function App() {
               <section className="min-h-80 rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
                 <SectionHeader title="走势视图" note="价格、均线和成交量" />
                 <div className="mt-4">
-                  <PriceChart candles={snapshot.candles} isLoading={snapshot.isLoading} settings={settings} />
+                  {dataSourceError ? (
+                    <StateNotice message={dataSourceError.message} title={dataSourceError.title} tone="danger" />
+                  ) : (
+                    <PriceChart candles={snapshot.candles} isLoading={snapshot.isLoading} settings={settings} />
+                  )}
                 </div>
               </section>
             </div>
@@ -153,7 +166,13 @@ function App() {
             <div className="grid gap-4">
               <section className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">
                 <SectionHeader title="信号推荐" note="辅助分析结果" />
-                <SignalCard isLoading={snapshot.isLoading} signal={snapshot.signal} />
+                {dataSourceError ? (
+                  <div className="mt-4">
+                    <StateNotice message={dataSourceError.message} title={dataSourceError.title} tone="danger" />
+                  </div>
+                ) : (
+                  <SignalCard isLoading={snapshot.isLoading} signal={snapshot.signal} />
+                )}
               </section>
 
               <section className="rounded-lg border border-orange-100 bg-white p-4 shadow-sm">

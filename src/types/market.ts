@@ -10,6 +10,15 @@ export type DataSourceMode = 'mock' | 'real' | 'hybrid'
 
 export type DataSourceStatusCode = 'mock' | 'real_ready' | 'hybrid' | 'not_configured'
 
+export type DataSourceErrorCode =
+  | 'not_configured'
+  | 'network_error'
+  | 'rate_limited'
+  | 'unauthorized'
+  | 'delayed'
+  | 'market_closed'
+  | 'provider_error'
+
 export interface DataSourceStatus {
   code: DataSourceStatusCode
   label: string

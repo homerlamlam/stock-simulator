@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
-import { applyMarketDataControls, getMarketDataService, searchStocksWithFallback } from '@/services'
+import {
+  applyMarketDataControls,
+  createDataSourceError,
+  getMarketDataService,
+  searchStocksWithFallback,
+} from '@/services'
 import { getDataSourceStatus, useDataSourceStore, useMockControlStore, useStrategyStore } from '@/store'
 import type { CandleRange, Market } from '@/types'
 import { generateTradeSignal } from '@/utils'
@@ -13,8 +18,19 @@ export function useQuote(symbol: string | null) {
   const canRequestMarketData = controls.status.canRequestMarketData
 
   return useQuery({
-    queryKey: ['quote', symbol, controls.dataSourceMode, controls.mockError, controls.fixtureMode],
+    queryKey: [
+      'quote',
+      symbol,
+      controls.dataSourceMode,
+      controls.mockError,
+      controls.fixtureMode,
+      controls.dataSourceErrorMode,
+    ],
     queryFn: () => {
+      if (controls.dataSourceErrorMode !== 'none') {
+        throw createDataSourceError(controls.dataSourceErrorMode)
+      }
+
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
       return getMarketDataService().getQuote(symbol ?? '')
     },
@@ -28,8 +44,20 @@ export function useCandles(symbol: string | null, range: CandleRange = DEFAULT_R
   const canRequestMarketData = controls.status.canRequestMarketData
 
   return useQuery({
-    queryKey: ['candles', symbol, range, controls.dataSourceMode, controls.mockError, controls.fixtureMode],
+    queryKey: [
+      'candles',
+      symbol,
+      range,
+      controls.dataSourceMode,
+      controls.mockError,
+      controls.fixtureMode,
+      controls.dataSourceErrorMode,
+    ],
     queryFn: () => {
+      if (controls.dataSourceErrorMode !== 'none') {
+        throw createDataSourceError(controls.dataSourceErrorMode)
+      }
+
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
       return getMarketDataService().getCandles(symbol ?? '', range)
     },
@@ -104,12 +132,14 @@ export function useSignal(symbol: string | null, range: CandleRange = DEFAULT_RA
 function useMarketDataControls() {
   const mockError = useMockControlStore((state) => state.mockError)
   const fixtureMode = useMockControlStore((state) => state.fixtureMode)
+  const dataSourceErrorMode = useMockControlStore((state) => state.dataSourceErrorMode)
   const refreshIntervalMs = useMockControlStore((state) => state.refreshIntervalMs)
   const dataSourceMode = useDataSourceStore((state) => state.mode)
   const status = getDataSourceStatus(dataSourceMode)
 
   return {
     dataSourceMode,
+    dataSourceErrorMode,
     mockError,
     fixtureMode,
     refreshIntervalMs,

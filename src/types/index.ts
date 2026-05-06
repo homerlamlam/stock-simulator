@@ -1,6 +1,7 @@
 export type {
   Candle,
   CandleRange,
+  DataSourceErrorCode,
   DataSourceMode,
   DataSourceStatus,
   DataSourceStatusCode,

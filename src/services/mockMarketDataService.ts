@@ -1,5 +1,5 @@
-import { DEFAULT_WATCHLIST } from '@/config'
 import type { Candle, CandleRange, MarketDataService, Quote, StockSearchOptions, StockSymbol } from '@/types'
+import { searchLocalStockCatalog } from './stockCatalog'
 
 export type MockFixtureMode = 'normal' | 'empty' | 'extreme' | 'flat' | 'uptrend' | 'downtrend'
 
@@ -18,50 +18,6 @@ interface SymbolSession {
 const BASE_TIME_MS = Date.UTC(2026, 4, 6, 1, 30, 0)
 const ONE_MINUTE_MS = 60 * 1000
 const DEFAULT_SEED = 'stock-signal-mvp'
-
-const BUILT_IN_STOCKS: StockSymbol[] = [
-  ...DEFAULT_WATCHLIST,
-  {
-    symbol: '430047.BJ',
-    code: '430047',
-    exchange: 'BJ',
-    market: 'CN',
-    displayCode: '430047',
-    name: '诺思兰德',
-  },
-  {
-    symbol: '00700.HK',
-    code: '00700',
-    exchange: 'HKEX',
-    market: 'HK',
-    displayCode: '00700',
-    name: '腾讯控股',
-  },
-  {
-    symbol: '09988.HK',
-    code: '09988',
-    exchange: 'HKEX',
-    market: 'HK',
-    displayCode: '09988',
-    name: '阿里巴巴-W',
-  },
-  {
-    symbol: 'AAPL.NASDAQ',
-    code: 'AAPL',
-    exchange: 'NASDAQ',
-    market: 'US',
-    displayCode: 'AAPL',
-    name: 'Apple Inc.',
-  },
-  {
-    symbol: 'TSLA.NASDAQ',
-    code: 'TSLA',
-    exchange: 'NASDAQ',
-    market: 'US',
-    displayCode: 'TSLA',
-    name: 'Tesla Inc.',
-  },
-]
 
 const RANGE_LENGTH: Record<CandleRange, number> = {
   '1D': 60,
@@ -123,23 +79,7 @@ export class MockMarketDataService implements MarketDataService {
 
   async searchStocks(keyword: string, options: StockSearchOptions = {}): Promise<StockSymbol[]> {
     this.throwIfMockError()
-
-    const normalizedKeyword = keyword.trim().toUpperCase()
-    const stocksByMarket = options.market
-      ? BUILT_IN_STOCKS.filter((stock) => stock.market === options.market)
-      : BUILT_IN_STOCKS
-
-    if (!normalizedKeyword) {
-      return stocksByMarket
-    }
-
-    return stocksByMarket.filter(
-      (stock) =>
-        stock.symbol.includes(normalizedKeyword) ||
-        stock.displayCode.includes(normalizedKeyword) ||
-        stock.code.includes(normalizedKeyword) ||
-        stock.name.toUpperCase().includes(normalizedKeyword),
-    )
+    return searchLocalStockCatalog(keyword, options.market)
   }
 
   private getCandlesForMode(symbol: string, range: CandleRange, shouldAdvance: boolean): Candle[] {

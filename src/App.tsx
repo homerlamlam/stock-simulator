@@ -73,7 +73,8 @@ function App() {
               onSearchKeywordChange={setSearchKeyword}
               onSelectStock={selectStock}
               searchKeyword={searchKeyword}
-              searchResults={stockSearch.data ?? []}
+              searchMessage={stockSearch.data?.message ?? null}
+              searchResults={stockSearch.data?.results ?? []}
               selectedSymbol={selectedSymbol}
               watchlist={watchlist}
             />

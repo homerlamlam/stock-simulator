@@ -5,6 +5,7 @@ interface WatchlistPanelProps {
   market: Market
   searchKeyword: string
   searchResults: StockSymbol[]
+  searchMessage: string | null
   watchlist: StockSymbol[]
   selectedSymbol: string | null
   isSearchLoading: boolean
@@ -32,6 +33,7 @@ export function WatchlistPanel({
   onSearchKeywordChange,
   onSelectStock,
   searchKeyword,
+  searchMessage,
   searchResults,
   selectedSymbol,
   watchlist,
@@ -101,6 +103,7 @@ export function WatchlistPanel({
             })
           )}
         </div>
+        {searchMessage ? <p className="text-xs leading-5 text-amber-700">{searchMessage}</p> : null}
       </div>
 
       {visibleWatchlist.length === 0 ? (

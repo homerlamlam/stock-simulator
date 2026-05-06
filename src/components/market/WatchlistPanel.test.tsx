@@ -102,6 +102,7 @@ function renderPanel(overrides: RenderPanelOverrides = {}) {
       onSearchKeywordChange={overrides.onSearchKeywordChange ?? vi.fn()}
       onSelectStock={vi.fn()}
       searchKeyword={overrides.searchKeyword ?? ''}
+      searchMessage={null}
       searchResults={overrides.searchResults ?? DEFAULT_WATCHLIST}
       selectedSymbol={overrides.selectedSymbol ?? '600519.SH'}
       watchlist={overrides.watchlist ?? DEFAULT_WATCHLIST}

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
-import { applyMarketDataControls, getMarketDataService } from '@/services'
+import { applyMarketDataControls, getMarketDataService, searchStocksWithFallback } from '@/services'
 import { getDataSourceStatus, useDataSourceStore, useMockControlStore, useStrategyStore } from '@/store'
 import type { CandleRange, Market } from '@/types'
 import { generateTradeSignal } from '@/utils'
@@ -44,11 +44,12 @@ export function useStockSearch(keyword: string, market?: Market) {
 
   return useQuery({
     queryKey: ['stock-search', normalizedKeyword, market, controls.dataSourceMode, controls.mockError],
-    queryFn: () => {
-      applyMarketDataControls(controls.mockError, controls.fixtureMode)
-      return getMarketDataService().searchStocks(normalizedKeyword, { market })
-    },
-    enabled: controls.status.canRequestMarketData,
+    queryFn: () =>
+      searchStocksWithFallback({
+        keyword: normalizedKeyword,
+        market,
+        mode: controls.dataSourceMode,
+      }),
   })
 }
 

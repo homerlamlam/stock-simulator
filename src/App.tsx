@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { PriceChart } from '@/components/charts'
 import { StateNotice } from '@/components/common'
 import { DataSourcePanel } from '@/components/data-source'
-import { WatchlistPanel } from '@/components/market'
+import { StockProfilePanel, WatchlistPanel } from '@/components/market'
 import { MockControlsPanel } from '@/components/mock'
 import { PaperTradePanel } from '@/components/paper-trade'
 import { SignalCard } from '@/components/signals'
 import { StrategySettingsPanel } from '@/components/strategy'
-import { useSignal, useStockSearch } from '@/hooks'
+import { useSignal, useStockProfile, useStockSearch } from '@/hooks'
 import { getDataSourceErrorCopy } from '@/services'
 import {
   getDataSourceStatus,
@@ -41,6 +41,7 @@ function App() {
   const dataSourceStatus = getDataSourceStatus(dataSourceMode)
   const stockSearch = useStockSearch(searchKeyword, activeMarket)
   const snapshot = useSignal(selectedSymbol)
+  const stockProfile = useStockProfile(selectedSymbol)
   const quote = snapshot.quote
   const selectedStock = watchlist.find((stock) => stock.symbol === selectedSymbol) ?? null
   const dataSourceError = snapshot.isError ? getDataSourceErrorCopy(snapshot.error) : null
@@ -149,6 +150,8 @@ function App() {
                   <Metric label="成交量" value={formatVolume(quote?.volume)} />
                   <Metric label="更新时间" value={quote?.updatedAt.slice(11, 19) ?? '--'} />
                 </div>
+
+                <StockProfilePanel isLoading={stockProfile.isLoading} profile={stockProfile.data} />
               </section>
 
               <section className="min-h-80 rounded-lg border border-orange-100 bg-white p-4 shadow-sm">

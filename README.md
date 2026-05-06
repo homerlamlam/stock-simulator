@@ -59,6 +59,15 @@ VITE_STOOQ_REAL_ENABLED=true
 
 重新运行 `npm run dev:local` 后，在页面左侧“数据源”选择 `Real API` 或 `Hybrid`。当前试点只对美股 Quote 做真实行情请求，例如切换到“美股”并选择 `AAPL`；K 线仍使用 Mock 回退数据。
 
+A 股真实搜索和股票基础信息使用 Tushare。本地开发时在 `.env.local` 中配置：
+
+```text
+VITE_TUSHARE_REAL_ENABLED=true
+TUSHARE_TOKEN=你的 Tushare token
+```
+
+`TUSHARE_TOKEN` 只由 Vite dev server 的 `/api/tushare` 代理读取，不使用 `VITE_` 前缀，不会被打包进浏览器代码。不要提交 `.env.local`。
+
 ## 验证命令
 
 ```bash
@@ -96,5 +105,6 @@ npm run build
 - 切换 Mock fixture，图表和状态提示变化。
 - 勾选模拟错误，页面显示错误提示，关闭后恢复。
 - 切换“数据源”到 `Real API`，未开启 `.env.local` 时应看到未配置提示；开启后可用美股 `AAPL` 验证真实 Quote 试点。
+- 在 A股菜单搜索 `茅台`、`平安`、`宁德时代`，应返回 Tushare A股真实股票基础信息，并在当前标的区域显示行业、地区、板块、上市日期。
 - 修改策略参数，信号重新计算。
 - 输入模拟买入价和数量，显示浮动盈亏、手续费和止盈/止损状态。

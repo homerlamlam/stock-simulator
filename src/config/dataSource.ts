@@ -1,5 +1,5 @@
 export const STOOQ_PROXY_BASE_URL = '/api/stooq'
 
 export function isRealDataSourceConfigured(): boolean {
-  return import.meta.env.VITE_STOOQ_REAL_ENABLED === 'true'
+  return import.meta.env.VITE_STOOQ_REAL_ENABLED === 'true' || import.meta.env.VITE_TUSHARE_REAL_ENABLED === 'true'
 }

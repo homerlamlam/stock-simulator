@@ -1,1 +1,1 @@
-export { useCandles, useMarketSnapshot, useQuote, useSignal, useStockSearch } from './marketHooks'
+export { useCandles, useMarketSnapshot, useQuote, useSignal, useStockProfile, useStockSearch } from './marketHooks'

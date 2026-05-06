@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { searchStocksWithFallback } from './stockSearchService'
 
 describe('searchStocksWithFallback', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
   it('returns local cache results in mock mode', async () => {
     const result = await searchStocksWithFallback({
       keyword: '茅台',
@@ -25,6 +29,9 @@ describe('searchStocksWithFallback', () => {
   })
 
   it('falls back to local cache when real API is not configured', async () => {
+    vi.stubEnv('VITE_STOOQ_REAL_ENABLED', 'false')
+    vi.stubEnv('VITE_TUSHARE_REAL_ENABLED', 'false')
+
     const result = await searchStocksWithFallback({
       keyword: 'AAPL',
       market: 'US',

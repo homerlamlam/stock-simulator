@@ -42,6 +42,22 @@ export interface StockSymbol {
   market: Market
   displayCode: string
   name: string
+  profile?: StockProfile
+}
+
+export interface StockProfile {
+  symbol: string
+  code: string
+  exchange: Exchange
+  market: Market
+  displayCode: string
+  name: string
+  area: string | null
+  industry: string | null
+  board: string | null
+  listDate: string | null
+  listStatus: string | null
+  dataSource: 'local' | 'tushare'
 }
 
 export interface StockSearchOptions {

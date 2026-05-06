@@ -1,6 +1,7 @@
 import { getDataSourceStatus } from '@/store'
 import type { DataSourceMode, Market, StockSymbol } from '@/types'
 import { searchLocalStockCatalog } from './stockCatalog'
+import { searchTushareStocks } from './tushareStockService'
 
 export type StockSearchSource = 'local' | 'real' | 'fallback'
 
@@ -41,7 +42,7 @@ export async function searchStocksWithFallback({
     }
   }
 
-  if (localResults.length > 0) {
+  if (localResults.length > 0 && (market !== 'CN' || mode === 'hybrid')) {
     return {
       results: localResults,
       source: 'local',
@@ -61,7 +62,17 @@ export async function searchStocksWithFallback({
 }
 
 async function searchRealStocks(keyword: string, market?: Market): Promise<StockSearchResult> {
-  void keyword
-  void market
-  throw new Error('Real stock search API is not implemented yet.')
+  if (market === 'CN') {
+    return {
+      results: await searchTushareStocks(keyword),
+      source: 'real',
+      message: '搜索结果来自 Tushare A股基础信息。',
+    }
+  }
+
+  return {
+    results: searchLocalStockCatalog(keyword, market),
+    source: 'fallback',
+    message: '当前真实搜索仅接入 A股，港股/美股暂用本地缓存。',
+  }
 }

@@ -524,6 +524,6 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 18:10:53 +08:00
+- 备注：已新增 Tushare dev server 代理、`StockProfile` 类型、A股真实搜索、股票基础信息展示、本地缓存和 Mock 回退；token 保存在被忽略的 `.env.local`，未提交；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，并用临时 dev 服务真实调用 Tushare `stock_basic`，确认返回 5512 条 A股基础信息且包含贵州茅台、平安银行、宁德时代。

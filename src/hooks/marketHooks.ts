@@ -4,7 +4,9 @@ import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
 import {
   applyMarketDataControls,
   createDataSourceError,
+  getLocalStockProfile,
   getMarketDataService,
+  getTushareStockProfile,
   searchStocksWithFallback,
 } from '@/services'
 import { getDataSourceStatus, useDataSourceStore, useMockControlStore, useStrategyStore } from '@/store'
@@ -78,6 +80,30 @@ export function useStockSearch(keyword: string, market?: Market) {
         market,
         mode: controls.dataSourceMode,
       }),
+  })
+}
+
+export function useStockProfile(symbol: string | null) {
+  const controls = useMarketDataControls()
+
+  return useQuery({
+    queryKey: ['stock-profile', symbol, controls.dataSourceMode],
+    queryFn: async () => {
+      if (!symbol) {
+        return null
+      }
+
+      if (controls.dataSourceMode !== 'mock' && symbol.endsWith('.SH')) {
+        return (await getTushareStockProfile(symbol)) ?? getLocalStockProfile(symbol)
+      }
+
+      if (controls.dataSourceMode !== 'mock' && (symbol.endsWith('.SZ') || symbol.endsWith('.BJ'))) {
+        return (await getTushareStockProfile(symbol)) ?? getLocalStockProfile(symbol)
+      }
+
+      return getLocalStockProfile(symbol)
+    },
+    enabled: Boolean(symbol),
   })
 }
 

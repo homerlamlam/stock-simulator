@@ -15,6 +15,7 @@ export type {
   SignalType,
   StockSearchOptions,
   StockSymbol,
+  StockProfile,
   StrategySettings,
   TradeSignal,
   TrendDirection,

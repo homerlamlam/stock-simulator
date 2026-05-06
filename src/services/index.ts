@@ -13,5 +13,11 @@ export type { DataSourceErrorMode } from './dataSourceErrors'
 export { MockMarketDataService, mockMarketDataService } from './mockMarketDataService'
 export { StooqMarketDataService, mapStooqQuoteResponse } from './stooqMarketDataService'
 export { searchStocksWithFallback } from './stockSearchService'
+export {
+  getLocalStockProfile,
+  getTushareStockProfile,
+  mapTushareStockBasicResponse,
+  searchTushareStocks,
+} from './tushareStockService'
 export type { StockSearchResult, StockSearchSource } from './stockSearchService'
 export type { MockFixtureMode } from './mockMarketDataService'

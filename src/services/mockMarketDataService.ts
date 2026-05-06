@@ -1,5 +1,5 @@
 import { DEFAULT_WATCHLIST } from '@/config'
-import type { Candle, CandleRange, MarketDataService, Quote, StockSymbol } from '@/types'
+import type { Candle, CandleRange, MarketDataService, Quote, StockSearchOptions, StockSymbol } from '@/types'
 
 export type MockFixtureMode = 'normal' | 'empty' | 'extreme' | 'flat' | 'uptrend' | 'downtrend'
 
@@ -22,11 +22,44 @@ const DEFAULT_SEED = 'stock-signal-mvp'
 const BUILT_IN_STOCKS: StockSymbol[] = [
   ...DEFAULT_WATCHLIST,
   {
+    symbol: '430047.BJ',
     code: '430047',
     exchange: 'BJ',
     market: 'CN',
-    displayCode: '430047.BJ',
+    displayCode: '430047',
     name: '诺思兰德',
+  },
+  {
+    symbol: '00700.HK',
+    code: '00700',
+    exchange: 'HKEX',
+    market: 'HK',
+    displayCode: '00700',
+    name: '腾讯控股',
+  },
+  {
+    symbol: '09988.HK',
+    code: '09988',
+    exchange: 'HKEX',
+    market: 'HK',
+    displayCode: '09988',
+    name: '阿里巴巴-W',
+  },
+  {
+    symbol: 'AAPL.NASDAQ',
+    code: 'AAPL',
+    exchange: 'NASDAQ',
+    market: 'US',
+    displayCode: 'AAPL',
+    name: 'Apple Inc.',
+  },
+  {
+    symbol: 'TSLA.NASDAQ',
+    code: 'TSLA',
+    exchange: 'NASDAQ',
+    market: 'US',
+    displayCode: 'TSLA',
+    name: 'Tesla Inc.',
   },
 ]
 
@@ -88,17 +121,21 @@ export class MockMarketDataService implements MarketDataService {
     return this.getCandlesForMode(symbol, range, true)
   }
 
-  async searchStocks(keyword: string): Promise<StockSymbol[]> {
+  async searchStocks(keyword: string, options: StockSearchOptions = {}): Promise<StockSymbol[]> {
     this.throwIfMockError()
 
     const normalizedKeyword = keyword.trim().toUpperCase()
+    const stocksByMarket = options.market
+      ? BUILT_IN_STOCKS.filter((stock) => stock.market === options.market)
+      : BUILT_IN_STOCKS
 
     if (!normalizedKeyword) {
-      return BUILT_IN_STOCKS
+      return stocksByMarket
     }
 
-    return BUILT_IN_STOCKS.filter(
+    return stocksByMarket.filter(
       (stock) =>
+        stock.symbol.includes(normalizedKeyword) ||
         stock.displayCode.includes(normalizedKeyword) ||
         stock.code.includes(normalizedKeyword) ||
         stock.name.toUpperCase().includes(normalizedKeyword),

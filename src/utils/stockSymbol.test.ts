@@ -8,10 +8,11 @@ describe('normalizeStockSymbol', () => {
     expect(result).toEqual({
       isValid: true,
       stock: {
+        symbol: '600519.SH',
         code: '600519',
         exchange: 'SH',
         market: 'CN',
-        displayCode: '600519.SH',
+        displayCode: '600519',
         name: '600519.SH',
       },
     })

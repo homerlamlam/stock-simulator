@@ -4,24 +4,27 @@ export const DEFAULT_MARKET = 'CN' as const
 
 export const DEFAULT_WATCHLIST: StockSymbol[] = [
   {
+    symbol: '600519.SH',
     code: '600519',
     exchange: 'SH',
     market: DEFAULT_MARKET,
-    displayCode: '600519.SH',
+    displayCode: '600519',
     name: '贵州茅台',
   },
   {
+    symbol: '000001.SZ',
     code: '000001',
     exchange: 'SZ',
     market: DEFAULT_MARKET,
-    displayCode: '000001.SZ',
+    displayCode: '000001',
     name: '平安银行',
   },
   {
+    symbol: '300750.SZ',
     code: '300750',
     exchange: 'SZ',
     market: DEFAULT_MARKET,
-    displayCode: '300750.SZ',
+    displayCode: '300750',
     name: '宁德时代',
   },
 ]

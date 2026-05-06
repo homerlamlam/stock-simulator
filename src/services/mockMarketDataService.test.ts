@@ -56,5 +56,7 @@ describe('MockMarketDataService', () => {
     expect(await service.searchStocks('600519')).toHaveLength(1)
     expect(await service.searchStocks('000001.SZ')).toHaveLength(1)
     expect(await service.searchStocks('茅台')).toHaveLength(1)
+    expect(await service.searchStocks('腾讯', { market: 'HK' })).toHaveLength(1)
+    expect(await service.searchStocks('AAPL', { market: 'US' })).toHaveLength(1)
   })
 })

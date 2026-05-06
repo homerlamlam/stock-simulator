@@ -14,7 +14,7 @@ interface WatchlistState {
   resetWatchlist: () => void
 }
 
-const defaultSelectedSymbol = DEFAULT_WATCHLIST[0]?.displayCode ?? null
+const defaultSelectedSymbol = DEFAULT_WATCHLIST[0]?.symbol ?? null
 
 export const useWatchlistStore = create<WatchlistState>()(
   persist(
@@ -23,7 +23,7 @@ export const useWatchlistStore = create<WatchlistState>()(
       selectedSymbol: defaultSelectedSymbol,
       addStock: (stock) =>
         set((state) => {
-          const alreadyExists = state.watchlist.some((item) => item.displayCode === stock.displayCode)
+          const alreadyExists = state.watchlist.some((item) => item.symbol === stock.symbol)
 
           if (alreadyExists) {
             return state
@@ -31,24 +31,24 @@ export const useWatchlistStore = create<WatchlistState>()(
 
           return {
             watchlist: [...state.watchlist, stock],
-            selectedSymbol: state.selectedSymbol ?? stock.displayCode,
+            selectedSymbol: state.selectedSymbol ?? stock.symbol,
           }
         }),
-      removeStock: (displayCode) =>
+      removeStock: (symbol) =>
         set((state) => {
-          const nextWatchlist = state.watchlist.filter((stock) => stock.displayCode !== displayCode)
-          const shouldMoveSelection = state.selectedSymbol === displayCode
+          const nextWatchlist = state.watchlist.filter((stock) => stock.symbol !== symbol)
+          const shouldMoveSelection = state.selectedSymbol === symbol
 
           return {
             watchlist: nextWatchlist,
-            selectedSymbol: shouldMoveSelection ? (nextWatchlist[0]?.displayCode ?? null) : state.selectedSymbol,
+            selectedSymbol: shouldMoveSelection ? (nextWatchlist[0]?.symbol ?? null) : state.selectedSymbol,
           }
         }),
-      selectStock: (displayCode) =>
+      selectStock: (symbol) =>
         set((state) => ({
           selectedSymbol:
-            displayCode === null || state.watchlist.some((stock) => stock.displayCode === displayCode)
-              ? displayCode
+            symbol === null || state.watchlist.some((stock) => stock.symbol === symbol)
+              ? symbol
               : state.selectedSymbol,
         })),
       clearWatchlist: () =>

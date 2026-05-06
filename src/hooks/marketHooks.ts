@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { DEFAULT_STRATEGY_SETTINGS } from '@/config'
 import { applyMarketDataControls, getMarketDataService } from '@/services'
 import { useMockControlStore, useStrategyStore } from '@/store'
-import type { CandleRange } from '@/types'
+import type { CandleRange, Market } from '@/types'
 import { generateTradeSignal } from '@/utils'
 
 const DEFAULT_RANGE: CandleRange = '1D'
@@ -36,15 +36,15 @@ export function useCandles(symbol: string | null, range: CandleRange = DEFAULT_R
   })
 }
 
-export function useStockSearch(keyword: string) {
+export function useStockSearch(keyword: string, market?: Market) {
   const controls = useMarketDataControls()
   const normalizedKeyword = keyword.trim()
 
   return useQuery({
-    queryKey: ['stock-search', normalizedKeyword, controls.mockError],
+    queryKey: ['stock-search', normalizedKeyword, market, controls.mockError],
     queryFn: () => {
       applyMarketDataControls(controls.mockError, controls.fixtureMode)
-      return getMarketDataService().searchStocks(normalizedKeyword)
+      return getMarketDataService().searchStocks(normalizedKeyword, { market })
     },
   })
 }

@@ -16,14 +16,16 @@ describe('useWatchlistStore', () => {
       code: '430047',
       exchange: 'BJ',
       market: 'CN',
-      displayCode: '430047.BJ',
+      symbol: '430047.BJ',
+      displayCode: '430047',
       name: '诺思兰德',
     })
     useWatchlistStore.getState().addStock({
       code: '430047',
       exchange: 'BJ',
       market: 'CN',
-      displayCode: '430047.BJ',
+      symbol: '430047.BJ',
+      displayCode: '430047',
       name: '诺思兰德',
     })
 

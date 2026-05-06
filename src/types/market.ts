@@ -16,11 +16,16 @@ export type SignalType =
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH'
 
 export interface StockSymbol {
+  symbol: string
   code: string
   exchange: Exchange
   market: Market
   displayCode: string
   name: string
+}
+
+export interface StockSearchOptions {
+  market?: Market
 }
 
 export interface Quote {
@@ -89,5 +94,5 @@ export interface TradeSignal {
 export interface MarketDataService {
   getQuote(symbol: string): Promise<Quote>
   getCandles(symbol: string, range: CandleRange): Promise<Candle[]>
-  searchStocks(keyword: string): Promise<StockSymbol[]>
+  searchStocks(keyword: string, options?: StockSearchOptions): Promise<StockSymbol[]>
 }

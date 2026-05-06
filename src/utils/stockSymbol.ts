@@ -38,7 +38,8 @@ export function normalizeStockSymbol(input: string): StockSymbolValidationResult
       code,
       exchange: exchange as Exchange,
       market: 'CN',
-      displayCode: `${code}.${exchange}`,
+      symbol: `${code}.${exchange}`,
+      displayCode: code,
       name: `${code}.${exchange}`,
     },
   }

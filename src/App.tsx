@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { PriceChart } from '@/components/charts'
 import { StateNotice } from '@/components/common'
 import { WatchlistPanel } from '@/components/market'
@@ -5,10 +6,13 @@ import { MockControlsPanel } from '@/components/mock'
 import { PaperTradePanel } from '@/components/paper-trade'
 import { SignalCard } from '@/components/signals'
 import { StrategySettingsPanel } from '@/components/strategy'
-import { useSignal } from '@/hooks'
+import { useSignal, useStockSearch } from '@/hooks'
 import { useMockControlStore, useStrategyStore, useWatchlistStore } from '@/store'
+import type { Market } from '@/types'
 
 function App() {
+  const [activeMarket, setActiveMarket] = useState<Market>('CN')
+  const [searchKeyword, setSearchKeyword] = useState('')
   const watchlist = useWatchlistStore((state) => state.watchlist)
   const selectedSymbol = useWatchlistStore((state) => state.selectedSymbol)
   const addStock = useWatchlistStore((state) => state.addStock)
@@ -22,8 +26,16 @@ function App() {
   const fixtureMode = useMockControlStore((state) => state.fixtureMode)
   const setMockError = useMockControlStore((state) => state.setMockError)
   const setFixtureMode = useMockControlStore((state) => state.setFixtureMode)
+  const stockSearch = useStockSearch(searchKeyword, activeMarket)
   const snapshot = useSignal(selectedSymbol)
   const quote = snapshot.quote
+  const selectedStock = watchlist.find((stock) => stock.symbol === selectedSymbol) ?? null
+
+  function handleMarketChange(market: Market): void {
+    setActiveMarket(market)
+    const firstStockInMarket = watchlist.find((stock) => stock.market === market)
+    selectStock(firstStockInMarket?.symbol ?? null)
+  }
 
   return (
     <main className="min-h-screen bg-[#fffaf3] text-slate-900">
@@ -42,10 +54,16 @@ function App() {
         <div className="grid flex-1 gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
           <div>
             <WatchlistPanel
+              isSearchLoading={stockSearch.isLoading}
+              market={activeMarket}
               onAddStock={addStock}
+              onMarketChange={handleMarketChange}
               onRemoveStock={removeStock}
               onResetWatchlist={resetWatchlist}
+              onSearchKeywordChange={setSearchKeyword}
               onSelectStock={selectStock}
+              searchKeyword={searchKeyword}
+              searchResults={stockSearch.data ?? []}
               selectedSymbol={selectedSymbol}
               watchlist={watchlist}
             />
@@ -63,7 +81,9 @@ function App() {
                 <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <p className="text-sm text-slate-500">当前标的</p>
-                    <h2 className="text-xl font-semibold text-slate-950">{selectedSymbol ?? '未选择股票'}</h2>
+                    <h2 className="text-xl font-semibold text-slate-950">
+                      {selectedStock ? `${selectedStock.displayCode} ${selectedStock.name}` : '未选择股票'}
+                    </h2>
                   </div>
                   <span className="w-fit rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
                     {snapshot.isLoading ? '加载中' : '数据已连接'}

@@ -9,6 +9,7 @@ export type {
   Quote,
   RiskLevel,
   SignalType,
+  StockSearchOptions,
   StockSymbol,
   StrategySettings,
   TradeSignal,

@@ -98,9 +98,13 @@ export function useSignal(symbol: string | null, range: CandleRange = DEFAULT_RA
 }
 
 function useMarketDataControls() {
-  return useMockControlStore((state) => ({
-    mockError: state.mockError,
-    fixtureMode: state.fixtureMode,
-    refreshIntervalMs: state.refreshIntervalMs,
-  }))
+  const mockError = useMockControlStore((state) => state.mockError)
+  const fixtureMode = useMockControlStore((state) => state.fixtureMode)
+  const refreshIntervalMs = useMockControlStore((state) => state.refreshIntervalMs)
+
+  return {
+    mockError,
+    fixtureMode,
+    refreshIntervalMs,
+  }
 }

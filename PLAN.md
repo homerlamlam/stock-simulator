@@ -290,3 +290,25 @@
 - 状态：已完成
 - 完成时间：2026-05-06 09:13:45 +08:00
 - 备注：最终验证已完成；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 全部通过。build 存在图表库体积 warning，暂不影响 MVP。
+
+## 13. 清理模板残留和补充运行说明
+
+需要完成：
+
+- 删除未使用的 Vite/React 模板资源。
+- 将 README 改为本项目说明。
+- 补充本地启动、验证命令和推荐端口说明。
+- 增加固定端口启动脚本，降低打开错项目服务的概率。
+
+验收标准：
+
+- README 不再是 Vite 默认模板内容。
+- 未使用的模板资源已移除。
+- 能通过 README 明确知道应打开哪个地址。
+- `npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 通过。
+
+状态记录：
+
+- 状态：已完成
+- 完成时间：2026-05-06 09:47:16 +08:00
+- 备注：已删除未使用模板资源，重写 README，新增 `npm run dev:local` 固定端口脚本并说明应访问 `http://127.0.0.1:5174/`；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，确认 5174 由当前项目服务占用。

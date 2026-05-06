@@ -12,10 +12,12 @@ import {
 } from 'recharts'
 import type { Candle, StrategySettings } from '@/types'
 import { calculateMovingAverage } from '@/utils'
+import { StateNotice } from '@/components/common'
 
 interface PriceChartProps {
   candles: Candle[]
   settings: StrategySettings
+  isLoading: boolean
 }
 
 interface ChartPoint {
@@ -26,7 +28,7 @@ interface ChartPoint {
   volume: number
 }
 
-export function PriceChart({ candles, settings }: PriceChartProps) {
+export function PriceChart({ candles, isLoading, settings }: PriceChartProps) {
   const chartData = useMemo<ChartPoint[]>(() => {
     const closes = candles.map((candle) => candle.close)
     const shortMaValues = calculateMovingAverage(closes, settings.shortMaPeriod)
@@ -41,12 +43,12 @@ export function PriceChart({ candles, settings }: PriceChartProps) {
     }))
   }, [candles, settings.longMaPeriod, settings.shortMaPeriod])
 
+  if (isLoading) {
+    return <StateNotice message="正在获取当前股票的模拟走势数据。" title="图表加载中" />
+  }
+
   if (chartData.length === 0) {
-    return (
-      <div className="flex min-h-72 items-center justify-center rounded-lg border border-dashed border-orange-200 bg-orange-50/50 text-sm text-slate-500">
-        暂无走势数据
-      </div>
-    )
+    return <StateNotice message="当前 fixture 或数据源没有返回 candles，图表暂时无法绘制。" title="暂无走势数据" />
   }
 
   return (

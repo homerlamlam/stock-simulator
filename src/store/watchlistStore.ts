@@ -11,6 +11,7 @@ interface WatchlistState {
   removeStock: (displayCode: string) => void
   selectStock: (displayCode: string | null) => void
   clearWatchlist: () => void
+  resetWatchlist: () => void
 }
 
 const defaultSelectedSymbol = DEFAULT_WATCHLIST[0]?.displayCode ?? null
@@ -54,6 +55,11 @@ export const useWatchlistStore = create<WatchlistState>()(
         set({
           watchlist: [],
           selectedSymbol: null,
+        }),
+      resetWatchlist: () =>
+        set({
+          watchlist: DEFAULT_WATCHLIST,
+          selectedSymbol: defaultSelectedSymbol,
         }),
     }),
     {

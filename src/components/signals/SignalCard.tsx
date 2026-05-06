@@ -1,7 +1,9 @@
 import type { TradeSignal } from '@/types'
+import { StateNotice } from '@/components/common'
 
 interface SignalCardProps {
   signal: TradeSignal | null
+  isLoading: boolean
 }
 
 const signalLabels: Record<TradeSignal['type'], string> = {
@@ -18,13 +20,13 @@ const riskLabels: Record<TradeSignal['riskLevel'], string> = {
   HIGH: '高风险',
 }
 
-export function SignalCard({ signal }: SignalCardProps) {
+export function SignalCard({ isLoading, signal }: SignalCardProps) {
+  if (isLoading) {
+    return <StateNotice message="正在等待行情和指标计算结果。" title="信号加载中" />
+  }
+
   if (!signal) {
-    return (
-      <div className="mt-4 rounded-lg border border-dashed border-orange-200 bg-orange-50/50 p-4 text-sm text-slate-500">
-        暂无可用信号
-      </div>
-    )
+    return <StateNotice message="当前没有足够行情数据生成信号，请检查自选股或 mock fixture。" title="暂无可用信号" />
   }
 
   return (
@@ -67,6 +69,12 @@ export function SignalCard({ signal }: SignalCardProps) {
           ))}
         </ul>
       </div>
+
+      {hasMissingIndicators(signal) ? (
+        <div className="mt-4">
+          <StateNotice message="当前 candles 数量不足，部分指标暂时显示为空。" title="指标数据不足" tone="warning" />
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -109,4 +117,13 @@ function formatRange(signal: TradeSignal): string {
 
 function formatNullable(value: number | null, suffix = ''): string {
   return value === null ? '--' : `${value.toFixed(2)}${suffix}`
+}
+
+function hasMissingIndicators(signal: TradeSignal): boolean {
+  return (
+    signal.indicators.shortMa === null ||
+    signal.indicators.longMa === null ||
+    signal.indicators.rsi === null ||
+    signal.indicators.volatility === null
+  )
 }

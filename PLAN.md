@@ -264,9 +264,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 09:12:50 +08:00
+- 备注：已补充 loading、error、empty、mock error 恢复、自选股为空恢复、candles 为空、指标数据不足和策略参数非法提示；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过，dev 服务返回 HTTP 200。build 存在图表库体积 warning，暂不影响 MVP。
 
 ## 12. 运行最终验证
 

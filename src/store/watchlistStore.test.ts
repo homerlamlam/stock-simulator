@@ -44,4 +44,12 @@ describe('useWatchlistStore', () => {
     expect(useWatchlistStore.getState().watchlist).toEqual([])
     expect(useWatchlistStore.getState().selectedSymbol).toBeNull()
   })
+
+  it('restores the default watchlist', () => {
+    useWatchlistStore.getState().clearWatchlist()
+    useWatchlistStore.getState().resetWatchlist()
+
+    expect(useWatchlistStore.getState().watchlist).toEqual(DEFAULT_WATCHLIST)
+    expect(useWatchlistStore.getState().selectedSymbol).toBe('600519.SH')
+  })
 })

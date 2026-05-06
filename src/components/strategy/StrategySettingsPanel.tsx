@@ -9,6 +9,7 @@ interface StrategySettingsPanelProps {
 
 export function StrategySettingsPanel({ settings, onUpdate, onReset }: StrategySettingsPanelProps) {
   const [error, setError] = useState<string | null>(null)
+  const persistedError = getSettingsError(settings)
 
   function updateNumberSetting(key: keyof StrategySettings, value: string): void {
     const numericValue = Number(value)
@@ -87,7 +88,9 @@ export function StrategySettingsPanel({ settings, onUpdate, onReset }: StrategyS
         />
       </div>
 
-      {error ? <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
+      {error || persistedError ? (
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error ?? persistedError}</p>
+      ) : null}
 
       <button
         className="w-full rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-semibold text-orange-800 transition hover:bg-orange-100"
@@ -101,6 +104,18 @@ export function StrategySettingsPanel({ settings, onUpdate, onReset }: StrategyS
       </button>
     </div>
   )
+}
+
+function getSettingsError(settings: StrategySettings): string | null {
+  if (settings.shortMaPeriod >= settings.longMaPeriod) {
+    return '当前策略参数非法：短均线周期必须小于长均线周期。'
+  }
+
+  if (settings.rsiOversold >= settings.rsiOverbought) {
+    return '当前策略参数非法：RSI 超卖阈值必须小于超买阈值。'
+  }
+
+  return null
 }
 
 interface NumberFieldProps {

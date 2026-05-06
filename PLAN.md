@@ -93,9 +93,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 08:56:58 +08:00
+- 备注：已为股票代码校验、MA、RSI、Volatility、信号生成和策略边界补充 Vitest 单元测试；`npm run test`、`npm run typecheck`、`npm run lint`、`npm run build` 已通过。
 
 ## 5. 实现 mockMarketDataService
 

@@ -141,9 +141,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 09:01:21 +08:00
+- 备注：已实现 `watchlistStore`、`strategyStore`、`mockControlStore`、localStorage 持久化封装及 store 测试；`npm run test`、`npm run typecheck`、`npm run lint`、`npm run build` 已通过。
 
 ## 7. 接入 TanStack Query
 

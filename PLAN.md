@@ -165,9 +165,9 @@
 
 状态记录：
 
-- 状态：未开始
-- 完成时间：
-- 备注：
+- 状态：已完成
+- 完成时间：2026-05-06 09:02:59 +08:00
+- 备注：已安装并接入 TanStack Query，新增 App Provider、通用 market data client、`useQuote`、`useCandles`、`useStockSearch`、`useMarketSnapshot`、`useSignal`；`npm run typecheck`、`npm run lint`、`npm run test`、`npm run build` 已通过。
 
 ## 8. 实现基础 UI 布局
 
